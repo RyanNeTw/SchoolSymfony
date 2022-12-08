@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Classroom{% endblock %}
+
+{% block body %}
+
+    <a href="/school">Schools</a>
+    <a href="/student">Students</a>
+    <ul class="table">
+            <li>
+                <h3>Id : {{ classroom.id }}</h3>
+            </li>
+            <li>
+                <h3>Name : {{ classroom.name }}</h3>
+            </li>
+    </ul>
+    {{ include('classroom/_delete_form.html.twig') }}
+    <a href="{{ path('app_classroom_index') }}">back to list</a>
+    <a href="{{ path('app_classroom_edit', {'id': classroom.id}) }}">edit</a>
+
+    {% if classroom.grades|length > 0 and classroom.students|length > 0 %}
+        {% set myAverage = 0 %}
+        {% for grade in classroom.grades %}
+            {% set myAverage = myAverage + grade.score %}
+        {% endfor %}
+        <h2>Class average : {{ myAverage // classroom.students|length }}/20</h2>
+    {% endif %}
+    <h1>Students list</h1>
+    {% if classroom.students|length > 0 %}
+        <ul class="list-unstyled list-group">
+            {% for student in classroom.students %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <h3>{{ student.firstname }}</h3>
+                    <h3>{{ student.lastname }}</h3>
+                    <h3>{{ student.email }}</h3>
+                    <a href="{{ path('app_student_show', {'id': student.id}) }}">show</a>
+                    {{ include('classroom/_add_grade_form.html.twig') }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

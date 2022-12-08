@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Student{% endblock %}
+
+{% block body %}
+    <a href="/school">Schools</a>
+    <a href="/classroom">Classrooms</a>
+
+    {% if student.grades|length > 0 %}
+        {% set myAverage = 0 %}
+        {% for grade in student.grades %}
+            {% set myAverage = myAverage + grade.score %}
+        {% endfor %}
+        <h2>Grade average : {{ myAverage // student.grades|length }}/20</h2>
+    {% endif %}
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ student.id }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ student.createdAt ? student.createdAt|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>LastName</th>
+                <td>{{ student.lastName }}</td>
+            </tr>
+            <tr>
+                <th>FirstName</th>
+                <td>{{ student.firstName }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ student.email }}</td>
+            </tr>
+            <tr>
+                <th>Birthdate</th>
+                <td>{{ student.birthdate ? student.birthdate|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_student_index') }}">back to list</a>
+
+    <a href="{{ path('app_student_edit', {'id': student.id}) }}">edit</a>
+
+    {{ include('student/_delete_form.html.twig') }}
+{% endblock %}
